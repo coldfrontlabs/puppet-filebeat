@@ -71,7 +71,7 @@ class filebeat (
   Hash    $shipper                                                                                                                           = $filebeat::params::shipper,
   Hash    $logging                                                                                                                           = $filebeat::params::logging,
   Hash    $run_options                                                                                                                       = $filebeat::params::run_options,
-  Hash    $filebeatconf                                                                                                                      = $filebeat::params::filebeatconf,
+  Hash    $filebeat_config                                                                                                                      = $filebeat::params::filebeat_config,
   String  $conf_template                                                                                                                     = $filebeat::params::conf_template,
   Optional[Pattern[/^(http(?:s)?\:\/\/[a-zA-Z0-9]+(?:(?:\.|\-)[a-zA-Z0-9]+)+(?:\:\d+)?(?:\/[\w\-\.]+)*(?:\/?|\/\w+\.[a-zA-Z]{2,4}(?:\?[\w]+\ = [\w\-]+)?)?(?:\&[\w]+\=[\w\-]+)*)$/]] $download_url = undef, # lint:ignore:140chars
   Optional[String]  $install_dir                                                                                                             = $filebeat::params::install_dir,
