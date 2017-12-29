@@ -68,6 +68,21 @@ max_procs: <%= @filebeat_config['max_procs'] %>
 #           http.code: 200
 #
 
+<% unless scope.function_versioncmp([@major_version, '6']) >= 0 -%>
+#============================= Filebeat modules ===============================
+
+filebeat.config.modules:
+  # Glob pattern for configuration loading
+  path: ${path.config}/modules.d/*.yml
+
+  # Set to true to enable config reloading
+  reload.enabled: false
+
+  # Period on which files under path should be checked for changes
+  #reload.period: 10s
+
+<% end -%>
+
 #================================ Outputs =====================================
 
 <%- if @filebeat_config['output']['elasticsearch'] != nil -%>
