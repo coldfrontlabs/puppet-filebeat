@@ -19,6 +19,7 @@ class filebeat::config {
         'config_dir'       => $filebeat::config_dir,
         'shutdown_timeout' => $filebeat::shutdown_timeout,
       },
+      'modules'           => $filebeat::modules,
       'output'            => $filebeat::outputs,
       'shipper'           => $filebeat::shipper,
       'logging'           => $filebeat::logging,
