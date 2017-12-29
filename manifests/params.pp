@@ -19,6 +19,7 @@ class filebeat::params {
   $purge_conf_dir       = true
   $fields               = {}
   $fields_under_root    = false
+  $modules              = {}
   $outputs              = {}
   $shipper              = {}
   $logging              = {}
