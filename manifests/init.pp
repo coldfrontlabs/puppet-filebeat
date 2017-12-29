@@ -26,6 +26,7 @@
 # @param config_dir_mode [String] The unix permissions mode set on the configuration directory (default: 0755)
 # @param config_file_mode [String] The unix permissions mode set on configuration files (default: 0644)
 # @param purge_conf_dir [Boolean] Should files in the prospector configuration directory not managed by puppet be automatically purged
+# @param modules [Hash] Will be converted to YAML for the modules section of the configuration (see documentation, and above)
 # @param outputs [Hash] Will be converted to YAML for the required outputs section of the configuration (see documentation, and above)
 # @param shipper [Hash] Will be converted to YAML to create the optional shipper section of the filebeat config (see documentation)
 # @param logging [Hash] Will be converted to YAML to create the optional logging section of the filebeat config (see documentation)
@@ -65,6 +66,7 @@ class filebeat (
   Optional[String] $config_dir_owner                                                                                                         = $filebeat::params::config_dir_owner,
   Optional[String] $config_dir_group                                                                                                         = $filebeat::params::config_dir_group,
   Boolean $purge_conf_dir                                                                                                                    = $filebeat::params::purge_conf_dir,
+  Hash    $modules
   Hash    $outputs                                                                                                                           = $filebeat::params::outputs,
   Hash    $shipper                                                                                                                           = $filebeat::params::shipper,
   Hash    $logging                                                                                                                           = $filebeat::params::logging,
