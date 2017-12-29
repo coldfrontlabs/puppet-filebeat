@@ -25,7 +25,7 @@ class filebeat::params {
   $logging              = {}
   $run_options          = {}
   $kernel_fail_message  = "${::kernel} is not supported by filebeat."
-  $filebeatconf         = {}
+  $filebeat_config      = {}
   $conf_template        = "${module_name}/pure_hash.yml.erb"
   $disable_config_test  = false
 
