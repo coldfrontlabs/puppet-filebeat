@@ -15,9 +15,12 @@ class filebeat::config {
       'fields'            => $filebeat::fields,
       'fields_under_root' => $filebeat::fields_under_root,
       'filebeat'          => {
-        'registry_file'    => $filebeat::registry_file,
-        'config_dir'       => $filebeat::config_dir,
-        'shutdown_timeout' => $filebeat::shutdown_timeout,
+        'registry_file'      => $filebeat::registry_file,
+        'config.prospectors' => {
+          'enabled' => true,
+          'path'    => "${filebeat::config_dir}/*.yml",
+        },
+        'shutdown_timeout'   => $filebeat::shutdown_timeout,
         'modules'          => $filebeat::modules,
         'config'           => $filebeat::filebeat_config,
       },
@@ -26,6 +29,7 @@ class filebeat::config {
       'logging'           => $filebeat::logging,
       'runoptions'        => $filebeat::run_options,
       'processors'        => $filebeat::processors,
+      'setup'             => $filebeat::setup,
     })
   } else {
     $filebeat_config = delete_undef_values({
@@ -52,11 +56,20 @@ class filebeat::config {
     })
   }
 
+  if $::filebeat_version {
+    $skip_validation = versioncmp($::filebeat_version, $filebeat::major_version) ? {
+      -1      => true,
+      default => false,
+    }
+  } else {
+    $skip_validation = false
+  }
+
   Filebeat::Prospector <| |> -> File['filebeat.yml']
 
   case $::kernel {
     'Linux'   : {
-      $validate_cmd = $filebeat::disable_config_test ? {
+      $validate_cmd = ($filebeat::disable_config_test or $skip_validation) ? {
         true    => undef,
         default => $major_version ? {
           '5'     => "${filebeat::filebeat_path} -N -configtest -c %",
@@ -89,7 +102,7 @@ class filebeat::config {
     } # end Linux
 
     'FreeBSD'   : {
-      $validate_cmd = $filebeat::disable_config_test ? {
+      $validate_cmd = ($filebeat::disable_config_test or $skip_validation) ? {
         true    => undef,
         default => '/usr/local/sbin/filebeat -N -configtest -c %',
       }
@@ -122,7 +135,7 @@ class filebeat::config {
       $cmd_install_dir = regsubst($filebeat::install_dir, '/', '\\', 'G')
       $filebeat_path = join([$cmd_install_dir, 'Filebeat', 'filebeat.exe'], '\\')
 
-      $validate_cmd = $filebeat::disable_config_test ? {
+      $validate_cmd = ($filebeat::disable_config_test or $skip_validation) ? {
         true    => undef,
         default => "\"${filebeat_path}\" -N -configtest -c \"%\"",
       }
